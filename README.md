@@ -57,7 +57,11 @@ Dependency injection is handled with Hilt throughout, and navigation uses typed,
    GEMINI_API_KEY=your_key_here
    MAPBOX_ACCESS_TOKEN=your_token_here
    ```
-3. Add your own `google-services.json` from your Firebase project (a template/example may be provided separately — this file is not committed).
+3. Set up Firebase:
+- Create a Firebase project at console.firebase.google.com
+- Enable Authentication (Email/Password and Google Sign-In providers)
+- Enable Firestore Database
+- Register an Android app in the project with your package name, then download your own google-services.json and place it in app/ (this file is gitignored and not included in the repo)
 4. Build and run in Android Studio.
 
 ## Roadmap
