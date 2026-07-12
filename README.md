@@ -15,7 +15,6 @@ Kashif is designed as a portfolio-grade demonstration of production-level Androi
 - **Clean Architecture** with clear separation between data, domain, and presentation layers
 - **MVI (Model-View-Intent)** for predictable, testable state management
 - **Offline-first design**, with local caching so the app remains usable without a constant connection
-- **Bilingual support**, built in as a first-class concern rather than an afterthought — reflecting the real needs of MENA users
 
 ## Features
 
