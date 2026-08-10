@@ -27,6 +27,8 @@ import com.example.kashifapp.ui.theme.KashifAppTheme
 
 @Composable
 fun SearchBar(
+    query: String,
+    onQueryChanged: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Surface(
@@ -62,6 +64,6 @@ fun SearchBar(
 @Composable
 fun SearchBarPreview() {
     KashifAppTheme {
-        SearchBar()
+       /* SearchBar()*/
     }
 }

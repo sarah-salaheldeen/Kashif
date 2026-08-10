@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,11 +27,18 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.kashifapp.R
+import com.example.kashifapp.ai.TagChip
+import com.example.kashifapp.place.domain.model.Place
+import com.example.kashifapp.place.domain.model.displayName
+import com.example.kashifapp.place.presentation.util.iconRes
+import com.example.kashifapp.place.presentation.util.placeholderColor
 import com.example.kashifapp.ui.theme.BackgroundColor
 import com.example.kashifapp.ui.theme.Brown
 import com.example.kashifapp.ui.theme.ColorPrimaryText
@@ -45,16 +53,16 @@ import dev.chrisbanes.haze.hazeSource
 
 @Composable
 fun PlaceCard(
-    name: String,
-    address: String,
-    rating: String,
-    tags: List<String>,
+    place: Place,
     modifier: Modifier = Modifier,
     imageRes: Int = R.drawable.ic_launcher_background,
-    onFavoriteClick: () -> Unit = {}
+    onFavoriteClick: () -> Unit = {},
+    onPlaceClick: () -> Unit
 ) {
+    val isArabic = LocalLayoutDirection.current == LayoutDirection.Rtl
     val hazeState = remember { HazeState() }
     Card(
+        onClick = onPlaceClick,
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
@@ -71,14 +79,23 @@ fun PlaceCard(
                     .fillMaxWidth()
                     .height(200.dp)
             ) {
-                Image(
-                    painter = painterResource(imageRes),
-                    contentDescription = null,
+                // OSM has no images — placeholder with category color for now.
+                // In a future iteration this could be enriched via
+                // Google Places Photos API or Wikimedia Commons.
+                Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .hazeSource(hazeState),
-                    contentScale = ContentScale.Crop
-                )
+                        .background(place.category.placeholderColor())
+                        .hazeSource(state = hazeState),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        painter = painterResource(place.category.iconRes()),
+                        contentDescription = null,
+                        tint = Color.White.copy(alpha = 0.4f),
+                        modifier = Modifier.size(64.dp)
+                    )
+                }
                 Box(
                     modifier = Modifier
                         .padding(16.dp)
@@ -120,7 +137,7 @@ fun PlaceCard(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = name,
+                        text = place.displayName(isArabic),
                         color = ColorPrimaryText,
                         fontSize = 20.sp
                     )
@@ -133,25 +150,28 @@ fun PlaceCard(
                             contentDescription = null,
                         )
                         Text(
-                            text = rating,
+                            text = "5.0"/*place.rating*/,
                             color = Brown,
                             fontSize = 14.sp
                         )
                     }
                 }
-                Text(
-                    text = address,
-                    color = ColorSecondaryText,
-                    fontSize = 16.sp
-                )
+                place.placeDetails?.address?.let {
+                    Text(
+                        text = it,
+                        color = ColorSecondaryText,
+                        fontSize = 16.sp
+                    )
+                }
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 16.dp),
                     horizontalArrangement = Arrangement.Start
                 ) {
-                    tags.forEach { tag ->
-                        TagChip(text = tag)
+                    TagChip(text = place.category.name)
+                    place.placeDetails?.cuisine?.let { cuisine ->
+                        TagChip(text = cuisine)
                     }
                 }
             }
@@ -181,13 +201,9 @@ fun TagChip(text: String) {
 fun PlaceCardPreview() {
     KashifAppTheme {
         Box(modifier = Modifier.background(BackgroundColor).padding(16.dp)) {
-            PlaceCard(
-                name = "متحف السودان القومي",
-                address = "شارع النيل، الخرطوم",
-                rating = "4.9",
-                tags = listOf("تاريخي", "ثقافة"),
-                imageRes = R.drawable.test_image_2
-            )
+            /*PlaceCard(
+
+            )*/
         }
     }
 }

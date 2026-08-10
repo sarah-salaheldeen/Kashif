@@ -1,4 +1,4 @@
-package com.example.kashifapp.place.domain
+package com.example.kashifapp.place.domain.model
 
 enum class PlaceCategory {
     RESTAURANT,
@@ -10,5 +10,6 @@ enum class PlaceCategory {
     HOTEL,
     GYM,
     BAKERY,
-    PHARMACY;
+    PHARMACY,
+    OTHER,
 }

@@ -1,4 +1,4 @@
-package com.example.kashifapp.place.domain
+package com.example.kashifapp.place.domain.model
 
 data class PlaceDetails(
     val address: String?= null,

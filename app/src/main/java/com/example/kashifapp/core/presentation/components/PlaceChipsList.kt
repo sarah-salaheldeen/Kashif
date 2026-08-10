@@ -9,12 +9,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.kashifapp.place.domain.Place
-import com.example.kashifapp.place.domain.PlaceCategory
+import com.example.kashifapp.place.domain.model.PlaceCategory
 
 @Composable
 fun PlaceChipsList(
     placeCategories: List<PlaceCategory>,
+    selectedCategory: PlaceCategory?,
+    onCategorySelected: (PlaceCategory) -> Unit,
     modifier: Modifier = Modifier,
     scrollState: LazyListState = rememberLazyListState()
 ) {

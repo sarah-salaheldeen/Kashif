@@ -15,11 +15,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.os.LocaleListCompat
+import com.example.kashifapp.auth.domain.repository.AuthRepository
 import com.example.kashifapp.navigation.AppNavigation
 import com.example.kashifapp.place.presentation.placeslist.PlacesListScreen
 import com.example.kashifapp.ui.theme.KashifAppTheme
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var authRepository: AuthRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -39,7 +47,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             KashifAppTheme(darkTheme = false) {
-                AppNavigation()
+                AppNavigation(authRepository = authRepository)
             }
         }
     }
@@ -49,6 +57,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun GreetingPreview() {
     KashifAppTheme {
-        AppNavigation()
+        Text("App Preview")
     }
 }

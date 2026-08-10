@@ -20,6 +20,7 @@ import androidx.navigation.toRoute
 import com.example.kashifapp.auth.domain.repository.AuthRepository
 import com.example.kashifapp.core.presentation.components.KashifBottomNav
 import com.example.kashifapp.place.presentation.placeslist.PlacesListScreen
+import com.example.kashifapp.place.presentation.placeslist.PlacesListScreenRoot
 import com.example.kashifapp.ui.theme.BackgroundColor
 
 @Composable
@@ -108,7 +109,11 @@ fun AppNavigation(
             // ── Main graph ──────────────────────────────────────────
             navigation<Route.MainGraph>(startDestination = Route.Discover) {
                 composable<Route.Discover> {
-                    PlacesListScreen()
+                    PlacesListScreenRoot(
+                        onPlaceClick = { placeId ->
+                            navController.navigate(Route.PlaceDetail(placeId))
+                        }
+                    )
                 }
                 composable<Route.PlaceDetail> { backStackEntry ->
                     val route = backStackEntry.toRoute<Route.PlaceDetail>()
