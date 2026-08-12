@@ -13,6 +13,8 @@ suspend fun <T> safeCall(call: suspend () -> Response<T>): Result<T, DataError.R
             response.isSuccessful -> response.body()
                 ?.let { Result.Success(it) }
                 ?: Result.Error(DataError.Remote.UNKNOWN)
+            response.code() == 400 -> Result.Error(DataError.Remote.BAD_REQUEST)
+            response.code() == 406 -> Result.Error(DataError.Remote.BAD_REQUEST)
             response.code() == 408 -> Result.Error(DataError.Remote.REQUEST_TIMEOUT)
             response.code() == 429 -> Result.Error(DataError.Remote.TOO_MANY_REQUESTS)
             response.code() in 500 .. 599 -> Result.Error(DataError.Remote.SERVER)

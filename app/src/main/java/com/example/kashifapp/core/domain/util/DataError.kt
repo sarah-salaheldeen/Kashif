@@ -4,6 +4,7 @@ sealed interface DataError: Error {
     enum class Remote: DataError {
         REQUEST_TIMEOUT,
         TOO_MANY_REQUESTS,
+        BAD_REQUEST,
         NO_INTERNET,
         SERVER,
         SERIALIZATION,

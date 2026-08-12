@@ -18,6 +18,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
 import com.example.kashifapp.auth.domain.repository.AuthRepository
+import com.example.kashifapp.auth.presentation.login.LoginScreenRoot
 import com.example.kashifapp.core.presentation.components.KashifBottomNav
 import com.example.kashifapp.place.presentation.placeslist.PlacesListScreen
 import com.example.kashifapp.place.presentation.placeslist.PlacesListScreenRoot
@@ -84,26 +85,13 @@ fun AppNavigation(
             // ── Auth graph ──────────────────────────────────────────
             navigation<Route.AuthGraph>(startDestination = Route.Login) {
                 composable<Route.Login> {
-                    /*LoginScreenRoot(
+                    LoginScreenRoot(
                         onLoginSuccess = {
                             navController.navigate(Route.MainGraph) {
                                 popUpTo(Route.AuthGraph) { inclusive = true }
                             }
-                        },
-                        onNavigateToRegister = {
-                            navController.navigate(Route.Register)
                         }
-                    )*/
-                }
-                composable<Route.Register> {
-                    /*RegisterScreenRoot(
-                        onRegisterSuccess = {
-                            navController.navigate(Route.MainGraph) {
-                                popUpTo(Route.AuthGraph) { inclusive = true }
-                            }
-                        },
-                        onNavigateToLogin = { navController.popBackStack() }
-                    )*/
+                    )
                 }
             }
             // ── Main graph ──────────────────────────────────────────

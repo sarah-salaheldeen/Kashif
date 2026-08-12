@@ -21,6 +21,7 @@ fun DataError.toUiText(): UiText {
         DataError.Auth.USER_NOT_FOUND -> R.string.error_user_not_found
         DataError.Auth.GOOGLE_SIGN_IN_CANCELLED -> R.string.error_google_sign_in_cancelled
         DataError.Auth.UNKNOWN -> R.string.error_unknown
+        DataError.Remote.BAD_REQUEST -> R.string.bad_request
     }
     return UiText.StringResourceId(stringResource)
 }

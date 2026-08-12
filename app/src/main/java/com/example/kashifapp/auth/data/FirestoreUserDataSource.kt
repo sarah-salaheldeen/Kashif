@@ -20,4 +20,12 @@ class FirestoreUserDataSource @Inject constructor(
             ))
             .await()
     }
+
+    suspend fun userDocumentExists(userId: String): Boolean {
+        return firestore.collection("users")
+            .document(userId)
+            .get()
+            .await()
+            .exists()
+    }
 }

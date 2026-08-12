@@ -6,7 +6,6 @@ sealed interface Route {
     //Auth Graph
     @Serializable data object AuthGraph: Route
     @Serializable data object Login: Route
-    @Serializable data object Register: Route
 
     //Main Graph
     @Serializable data object MainGraph: Route

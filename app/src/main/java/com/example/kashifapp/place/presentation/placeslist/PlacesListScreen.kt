@@ -171,6 +171,6 @@ fun PlacesListScreen(
 @Composable
 fun PlacesListScreenPreview() {
     KashifAppTheme {
-        /*PlacesListScreen()*/
+        PlacesListScreen(PlacesListState(), {})
     }
 }

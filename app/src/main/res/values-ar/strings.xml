@@ -29,5 +29,23 @@
     <string name="error_user_not_found">User not found</string>
     <string name="error_google_sign_in_cancelled">Google signin cancelled</string>
     <string name="no_places_found">لا توجد أماكن</string>
+    <string name="error_name_required">Name is required</string>
+    <string name="error_password_too_short">Password is too short</string>
+    <string name="error_passwords_dont_match">Passwords do not match</string>
+    <string name="sign_in_text">مرحباً بك مجددًا, يرجى تسجيل الدخول للمتابعة.</string>
+    <string name="sign_up_text">إنشاء حساب جديد</string>
+    <string name="join_kashif_community">انضم إلى مجتمع المستكشفين</string>
+    <string name="display_name">الإسم</string>
+    <string name="email">البريد الإلكتروني</string>
+    <string name="password">كلمة المرور</string>
+    <string name="confirm_password">تأكيد كلمة المرور</string>
+    <string name="sign_in">تسجيل دخول</string>
+    <string name="sign_up">إنشاء حساب</string>
+    <string name="continue_with_google">المتابعة باستخدام جوجل</string>
+    <string name="no_account">ليس لديك حساب؟ </string>
+    <string name="have_account">لديك حساب فعلًا؟</string>
+    <string name="login">تسجيل الدخول</string>
+    <string name="register_now">سجل الاَن</string>
+    <string name="bad_request">Bad request</string>
 
 </resources>

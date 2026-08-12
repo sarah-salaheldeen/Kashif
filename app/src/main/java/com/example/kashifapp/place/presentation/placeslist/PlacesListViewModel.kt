@@ -1,7 +1,9 @@
 package com.example.kashifapp.place.presentation.placeslist
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.kashifapp.core.domain.util.DataError
 import com.example.kashifapp.core.domain.util.Result
 import com.example.kashifapp.core.presentation.toUiText
 import com.example.kashifapp.place.domain.model.PlaceCategory
@@ -109,7 +111,6 @@ class PlacesListViewModel @Inject constructor(
 
     private fun syncPlaces() {
         viewModelScope.launch {
-            // Only show full-screen loading if Room has nothing to show yet
             val showFullScreenLoading = _state.value.places.isEmpty()
             _state.update {
                 it.copy(
@@ -119,15 +120,15 @@ class PlacesListViewModel @Inject constructor(
                 )
             }
 
+            // One request for all categories — query is ~600 chars, well within limits
             val result = placeRepository.syncPlaces(
                 city = _state.value.selectedCity,
                 categories = PlaceCategory.entries.toList()
             )
 
+            Log.d("Kashif", "syncPlaces: result=$result")
             _state.update { it.copy(isLoading = false, isSyncing = false) }
 
-            // Only surface the error if we have nothing to show.
-            // If we have cached data, silently fail — the user already sees places.
             if (result is Result.Error && _state.value.places.isEmpty()) {
                 _state.update { it.copy(errorMessage = result.error.toUiText()) }
             }

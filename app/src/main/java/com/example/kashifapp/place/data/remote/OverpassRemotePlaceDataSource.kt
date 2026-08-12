@@ -1,5 +1,6 @@
 package com.example.kashifapp.place.data.remote
 
+import android.util.Log
 import com.example.kashifapp.core.data.util.safeCall
 import com.example.kashifapp.core.domain.util.DataError
 import com.example.kashifapp.core.domain.util.Result
@@ -9,6 +10,7 @@ import com.example.kashifapp.place.data.mapper.toPlace
 import com.example.kashifapp.place.domain.model.City
 import com.example.kashifapp.place.domain.model.Place
 import com.example.kashifapp.place.domain.model.PlaceCategory
+import java.util.Locale
 import javax.inject.Inject
 
 class OverpassRemotePlaceDataSource @Inject constructor(
@@ -27,18 +29,20 @@ class OverpassRemotePlaceDataSource @Inject constructor(
     }
 
     private fun buildQuery(city: City, categories: List<PlaceCategory>): String {
-        val filters = categories.joinToString("\n") { category ->
+        val filters = StringBuilder()
+        categories.forEach { category ->
             val osmFilter = category.toOsmFilter()
-            // Both node and way — node is a point, way is a building outline
-            """
-            node[$osmFilter](around:${city.radiusMeters},${city.latitude},${city.longitude});
-            way[$osmFilter](around:${city.radiusMeters},${city.latitude},${city.longitude});
-            """.trimIndent()
+            if (osmFilter.isBlank()) return@forEach  // ← skip anything unmapped
+            val around = String.format(
+                Locale.US,
+                "around:%d,%.6f,%.6f",
+                city.radiusMeters,
+                city.latitude,
+                city.longitude
+            )
+            filters.append("node[$osmFilter]($around);")
+            filters.append("way[$osmFilter]($around);")
         }
-        return """
-            [out:json][timeout:30];
-            ($filters);
-            out body center 200;
-        """.trimIndent()
+        return "[out:json][timeout:30];($filters);out body center 200;"
     }
 }
