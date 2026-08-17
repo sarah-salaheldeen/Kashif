@@ -1,8 +1,7 @@
-package com.example.kashifapp.core.presentation
+package com.example.kashifapp.core.presentation.util
 
 import com.example.kashifapp.R
 import com.example.kashifapp.core.domain.util.DataError
-import com.example.kashifapp.core.presentation.util.UiText
 
 fun DataError.toUiText(): UiText {
     val stringResource = when (this) {
@@ -22,6 +21,9 @@ fun DataError.toUiText(): UiText {
         DataError.Auth.GOOGLE_SIGN_IN_CANCELLED -> R.string.error_google_sign_in_cancelled
         DataError.Auth.UNKNOWN -> R.string.error_unknown
         DataError.Remote.BAD_REQUEST -> R.string.bad_request
+        DataError.Location.PERMISSION_DENIED -> R.string.error_location_permission
+        DataError.Location.UNAVAILABLE -> R.string.error_location_unavailable
+        DataError.Location.DISABLED -> R.string.error_location_disabled
     }
     return UiText.StringResourceId(stringResource)
 }

@@ -1,5 +1,7 @@
 package com.example.kashifapp.place.data.mapper
 
+import com.example.kashifapp.place.data.dto.GeoapifyFeatureDto
+import com.example.kashifapp.place.data.dto.GeoapifyPropertiesDto
 import com.example.kashifapp.place.data.dto.OsmElementDto
 import com.example.kashifapp.place.data.local.PlaceEntity
 import com.example.kashifapp.place.domain.model.Place
@@ -121,19 +123,68 @@ private fun buildAddress(tags: Map<String, String>): String? =
         .ifBlank { null }
 
 // OSM key/value for each category — used by the data source to build queries
-internal fun PlaceCategory.toOsmFilter(): String {
-    val (key, value ) = when(this) {
-        PlaceCategory.RESTAURANT -> "amenity" to "restaurant"
-        PlaceCategory.CAFE -> "amenity" to "cafe"
-        PlaceCategory.PARK -> "leisure" to "park"
-        PlaceCategory.MUSEUM     -> "tourism" to "museum"
-        PlaceCategory.SHOPPING   -> "shop"    to "mall"
-        PlaceCategory.MOSQUE     -> "amenity" to "place_of_worship"
-        PlaceCategory.HOTEL      -> "tourism" to "hotel"
-        PlaceCategory.GYM        -> "leisure" to "fitness_centre"
-        PlaceCategory.BAKERY     -> "shop"    to "bakery"
-        PlaceCategory.PHARMACY   -> "amenity" to "pharmacy"
-        else -> return ""
+internal fun PlaceCategory.toGeoapifyCategory(): String = when (this) {
+    PlaceCategory.RESTAURANT -> "catering.restaurant"
+    PlaceCategory.CAFE -> "catering.cafe"
+    PlaceCategory.PARK -> "leisure.park"
+    PlaceCategory.MUSEUM -> "entertainment.museum"
+    PlaceCategory.SHOPPING -> "commercial.shopping_mall"
+    PlaceCategory.MOSQUE -> "religion.place_of_worship"
+    PlaceCategory.HOTEL -> "accommodation.hotel"
+    PlaceCategory.GYM -> "sport.fitness"
+    PlaceCategory.BAKERY -> "commercial.food_and_drink.bakery"
+    PlaceCategory.PHARMACY -> "healthcare.pharmacy"
+    else -> ""
+}
+
+fun GeoapifyFeatureDto.toPlace(): Place? {
+    val props = properties
+    val name = props.name ?: return null  // skip unnamed
+    val lat = geometry.coordinates.getOrNull(1) ?: return null
+    val lon = geometry.coordinates.getOrNull(0) ?: return null
+    val nameAr = props.nameInternational?.get("ar")
+
+    return Place(
+        id = props.placeId,
+        nameEn = name,
+        nameAr = nameAr,
+        category = categoryFromGeoapifyCategories(props.categories),
+        placeDetails = PlaceDetails(
+            address = listOfNotNull(props.addressLine1, props.addressLine2)
+                .joinToString(", ").ifBlank { null },
+            phone = props.phone,
+            webSite = props.website,
+            openingHours = props.openingHours,
+            cuisine = (props.catering?.get("cuisine") as? String),
+            extraInfo = buildExtraTags(props)
+        ),
+        lat = lat,
+        lon = lon,
+        city = props.city ?: "",
+        lastSyncedAt = System.currentTimeMillis(),
+        name = name
+    )
+}
+
+private fun categoryFromGeoapifyCategories(categories: List<String>): PlaceCategory {
+    return when {
+        categories.any { it.startsWith("catering.restaurant") } -> PlaceCategory.RESTAURANT
+        categories.any { it.startsWith("catering.cafe") } -> PlaceCategory.CAFE
+        categories.any { it.startsWith("leisure.park") } -> PlaceCategory.PARK
+        categories.any { it.startsWith("entertainment.museum") } -> PlaceCategory.MUSEUM
+        categories.any { it.startsWith("commercial.shopping") } -> PlaceCategory.SHOPPING
+        categories.any { it.startsWith("religion.muslim") } -> PlaceCategory.MOSQUE
+        categories.any { it.startsWith("accommodation.hotel") } -> PlaceCategory.HOTEL
+        categories.any { it.startsWith("sport.fitness") } -> PlaceCategory.GYM
+        categories.any { it.contains("bakery") } -> PlaceCategory.BAKERY
+        categories.any { it.startsWith("healthcare.pharmacy") } -> PlaceCategory.PHARMACY
+        else -> PlaceCategory.RESTAURANT
     }
-    return """"$key"="$value""""
+}
+
+private fun buildExtraTags(props: GeoapifyPropertiesDto): Map<String, String> {
+    val tags = mutableMapOf<String, String>()
+    props.facilities?.forEach { (k, v) -> tags["facility_$k"] = v.toString() }
+    props.catering?.forEach { (k, v) -> tags["catering_$k"] = v.toString() }
+    return tags
 }

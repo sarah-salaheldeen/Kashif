@@ -47,5 +47,17 @@
     <string name="login">تسجيل الدخول</string>
     <string name="register_now">سجل الاَن</string>
     <string name="bad_request">Bad request</string>
+    <string name="error_location_permission">نحتاج إذن الموقع لاكتشاف الأماكن القريبة منك</string>
+    <string name="error_location_unavailable">تعذر تحديد موقعك. يرجى المحاولة مرة أخرى</string>
+    <string name="retry">إعادة المحاولة</string>
+    <string name="error_location_disabled">موقع جهازك معطّل</string>
+    <string name="location_disabled_title">الموقع معطّل</string>
+    <string name="location_disabled_message">قم بتفعيل الموقع لاكتشاف الأماكن القريبة منك</string>
+    <string name="open_settings">فتح الإعدادات</string>
+    <string name="open_app_settings">إعدادات التطبيق</string>
+    <string name="cancel">إلغاء</string>
+    <string name="no_places_nearby">لا توجد أماكن بالقرب منك</string>
+    <string name="no_places_for_filter">لا توجد أماكن تطابق هذا الفلتر</string>
+    <string name="clear_filters">إزالة الفلاتر</string>
 
 </resources>

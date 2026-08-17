@@ -64,8 +64,7 @@ fun PlaceCard(
     Card(
         onClick = onPlaceClick,
         modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+            .fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(contentColor = Color.White, containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)

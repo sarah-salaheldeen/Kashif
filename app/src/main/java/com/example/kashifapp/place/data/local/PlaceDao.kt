@@ -12,13 +12,17 @@ interface PlaceDao {
 
     @Query("""
         SELECT * FROM places
-        WHERE city = :cityId
+        WHERE lat BETWEEN :minLat AND :maxLat
+        AND long BETWEEN :minLon AND :maxLon
         AND (:category IS NULL OR category = :category)
         AND (:query = '' OR nameEn LIKE '%' || :query || '%' OR nameAr LIKE '%' || :query || '%')
         ORDER BY nameEn Asc
     """)
     fun observePlaces(
-        cityId: String,
+        minLat: Double,
+        maxLat: Double,
+        minLon: Double,
+        maxLon: Double,
         category: String?,
         query: String
     ): Flow<List<PlaceEntity>>
@@ -44,6 +48,11 @@ interface PlaceDao {
     @Query("UPDATE places SET isSaved = :isSaved WHERE id = :id")
     suspend fun updateSavedStatus(id: String, isSaved: Boolean)
 
-    @Query("SELECT MAX(lastSyncedAt) FROM places WHERE city = :cityId")
-    suspend fun getLastSynTime(cityId: String): Long?
+    @Query("SELECT MAX(lastSyncedAt) FROM places WHERE lat BETWEEN :minLat AND :maxLat AND long BETWEEN :minLon AND :maxLon")
+    suspend fun getLastSynTime(
+        minLat: Double,
+        maxLat: Double,
+        minLon: Double,
+        maxLon: Double
+    ): Long?
 }

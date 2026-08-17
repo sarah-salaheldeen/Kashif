@@ -1,6 +1,7 @@
 package com.example.kashifapp.di
 
 import com.example.kashifapp.BuildConfig
+import com.example.kashifapp.place.data.remote.GeoapifyApiService
 import com.example.kashifapp.place.data.remote.OverpassApiService
 import dagger.Module
 import dagger.Provides
@@ -38,14 +39,17 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideOverpassRetrofit(client: OkHttpClient): Retrofit = Retrofit.Builder()
-        .baseUrl("https://overpass-api.de/api/")
+    fun provideGeoapifyRetrofit(client: OkHttpClient): Retrofit = Retrofit.Builder()
+        .baseUrl("https://api.geoapify.com/")
         .client(client)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
     @Provides
     @Singleton
-    fun provideOverpassApiService(retrofit: Retrofit): OverpassApiService =
-        retrofit.create(OverpassApiService::class.java)
+    fun provideGeoapifyApiService(retrofit: Retrofit): GeoapifyApiService =
+        retrofit.create(GeoapifyApiService::class.java)
+
+    @Provides @GeoapifyApiKey
+    fun provideGeoapifyApiKey(): String = BuildConfig.GEOAPIFY_API_KEY
 }

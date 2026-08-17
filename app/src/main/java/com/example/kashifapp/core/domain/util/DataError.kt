@@ -25,4 +25,10 @@ sealed interface DataError: Error {
         GOOGLE_SIGN_IN_CANCELLED,
         UNKNOWN
     }
+
+    enum class Location: DataError {
+        PERMISSION_DENIED,
+        UNAVAILABLE,
+        DISABLED  // ← GPS/location services are off
+    }
 }

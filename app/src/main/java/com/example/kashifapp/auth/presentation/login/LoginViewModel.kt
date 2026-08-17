@@ -1,6 +1,5 @@
 package com.example.kashifapp.auth.presentation.login
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kashifapp.R
@@ -9,7 +8,7 @@ import com.example.kashifapp.core.domain.util.DataError
 import com.example.kashifapp.core.domain.util.Result
 import com.example.kashifapp.core.domain.util.onError
 import com.example.kashifapp.core.domain.util.onSuccess
-import com.example.kashifapp.core.presentation.toUiText
+import com.example.kashifapp.core.presentation.util.toUiText
 import com.example.kashifapp.core.presentation.util.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel

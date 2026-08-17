@@ -1,11 +1,10 @@
 package com.example.kashifapp.place.data.remote
 
-import android.util.Log
 import com.example.kashifapp.core.data.util.safeCall
 import com.example.kashifapp.core.domain.util.DataError
 import com.example.kashifapp.core.domain.util.Result
 import com.example.kashifapp.core.domain.util.map
-import com.example.kashifapp.place.data.mapper.toOsmFilter
+import com.example.kashifapp.place.data.mapper.toGeoapifyCategory
 import com.example.kashifapp.place.data.mapper.toPlace
 import com.example.kashifapp.place.domain.model.City
 import com.example.kashifapp.place.domain.model.Place
@@ -31,7 +30,7 @@ class OverpassRemotePlaceDataSource @Inject constructor(
     private fun buildQuery(city: City, categories: List<PlaceCategory>): String {
         val filters = StringBuilder()
         categories.forEach { category ->
-            val osmFilter = category.toOsmFilter()
+            val osmFilter = category.toGeoapifyCategory()
             if (osmFilter.isBlank()) return@forEach  // ← skip anything unmapped
             val around = String.format(
                 Locale.US,

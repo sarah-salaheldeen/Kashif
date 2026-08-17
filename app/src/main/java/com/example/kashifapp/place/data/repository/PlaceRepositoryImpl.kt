@@ -1,6 +1,7 @@
 package com.example.kashifapp.place.data.repository
 
 import android.util.Log
+import com.example.kashifapp.core.domain.model.UserLocation
 import com.example.kashifapp.core.domain.util.DataError
 import com.example.kashifapp.core.domain.util.Result
 import com.example.kashifapp.core.domain.util.map
@@ -8,6 +9,7 @@ import com.example.kashifapp.place.data.local.PlaceDao
 import com.example.kashifapp.place.data.mapper.toPlace
 import com.example.kashifapp.place.data.mapper.toPlaceEntity
 import com.example.kashifapp.place.data.remote.FirestoreSavedPlacesDataSource
+import com.example.kashifapp.place.data.remote.GeoapifyRemotePlaceDataSource
 import com.example.kashifapp.place.data.remote.OverpassRemotePlaceDataSource
 import com.example.kashifapp.place.domain.model.City
 import com.example.kashifapp.place.domain.model.Place
@@ -19,18 +21,21 @@ import javax.inject.Inject
 
 class PlaceRepositoryImpl @Inject constructor(
     private val placeDao: PlaceDao,
-    private val remoteDataSource: OverpassRemotePlaceDataSource,
+    private val remoteDataSource: GeoapifyRemotePlaceDataSource,
     private val firestoreSavedPlaces: FirestoreSavedPlacesDataSource
 
 ): PlaceRepository {
     override fun observePlaces(
-        cityId: String,
+        location: UserLocation,
         category: PlaceCategory?,
         query: String
     ): Flow<List<Place>> {
         return placeDao
             .observePlaces(
-                cityId = cityId,
+                minLat = location.minLat,
+                maxLat = location.maxLat,
+                minLon = location.minLon,
+                maxLon = location.maxLon,
                 category = category?.name,
                 query = query
             )
@@ -38,11 +43,11 @@ class PlaceRepositoryImpl @Inject constructor(
     }
 
     override suspend fun syncPlaces(
-        city: City,
+        location: UserLocation,
         categories: List<PlaceCategory>
     ): Result<Unit, DataError.Remote> {
         return remoteDataSource
-            .fetchPlaces(city, categories)
+            .fetchPlaces(location, categories)
             .map { places ->
                 // Write to Room — the observePlaces Flow emits automatically after this
                 placeDao.upsertAll(places.map { place -> place.toPlaceEntity() })
@@ -63,8 +68,14 @@ class PlaceRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getLAstSyncTime(cityId: String): Long? {
-        return placeDao.getLastSynTime(cityId)
+    override suspend fun getLAstSyncTime(latitude: Double, longitude: Double): Long? {
+        val location = UserLocation(latitude, longitude)
+        return placeDao.getLastSynTime(
+            location.minLat,
+            location.maxLat,
+            location.minLon,
+            location.maxLon
+        )
     }
 
 }

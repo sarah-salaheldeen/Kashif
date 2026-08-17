@@ -47,5 +47,17 @@
     <string name="login">Sign In</string>
     <string name="register_now">Register</string>
     <string name="bad_request">Bad request</string>
+    <string name="error_location_permission">Location permission is needed to discover nearby places</string>
+    <string name="error_location_unavailable">Could not get your location. Please try again</string>
+    <string name="retry">Retry</string>
+    <string name="error_location_disabled">Your device location is turned off</string>
+    <string name="location_disabled_title">Location is Off</string>
+    <string name="location_disabled_message">Turn on device location to discover places near you</string>
+    <string name="open_settings">Open Settings</string>
+    <string name="open_app_settings">App Settings</string>
+    <string name="cancel">Cancel</string>
+    <string name="no_places_nearby">No places found near you</string>
+    <string name="no_places_for_filter">No places match this filter</string>
+    <string name="clear_filters">Clear filters</string>
 
 </resources>

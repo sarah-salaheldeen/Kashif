@@ -1,5 +1,6 @@
 package com.example.kashifapp.place.domain.repository
 
+import com.example.kashifapp.core.domain.model.UserLocation
 import com.example.kashifapp.core.domain.util.DataError
 import com.example.kashifapp.core.domain.util.Result
 import com.example.kashifapp.place.domain.model.City
@@ -10,18 +11,18 @@ import kotlinx.coroutines.flow.Flow
 interface PlaceRepository {
     // Room-backed Flow — emits whenever local data changes
     fun observePlaces(
-        cityId: String,
+        location: UserLocation,
         category: PlaceCategory?,
         query: String = ""
     ): Flow<List<Place>>
 
     // Fetches from Overpass and writes to Room — Room Flow then emits automatically
     suspend fun syncPlaces(
-        city: City,
+        location: UserLocation,
         categories: List<PlaceCategory>
     ): Result<Unit, DataError.Remote>
 
     suspend fun toggleSaved(placeId: String, isSaved: Boolean)
-    suspend fun getLAstSyncTime(cityId: String): Long?
+    suspend fun getLAstSyncTime(latitude: Double, longitude: Double): Long?
 
 }
